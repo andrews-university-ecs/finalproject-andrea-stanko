@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">finalproject</string>
+    <string name="app_name">MATH QUIZ</string>
+    <string name="title_activity_question">Enter a true/false math question: </string>
+    <string name="true_button">TRUE</string>
+    <string name="false_button">FALSE</string>
+    <!--  TODO: Remove or change this placeholder text  -->
+    <string name="hello_blank_fragment">blank fragment</string>
+    <string name="true_string">TRUE</string>
+    <string name="false_string">FALSE</string>
+    <string name="undo_option">UNDO</string>
+    <string name="question_deleted_msg">%1$s was deleted</string>
 </resources>

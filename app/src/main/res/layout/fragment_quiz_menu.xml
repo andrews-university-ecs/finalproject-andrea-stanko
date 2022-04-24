@@ -1,0 +1,43 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:id="@+id/frameLayout2" android:layout_width="match_parent" android:layout_height="match_parent" tools:context=".QuizMenuFragment">
+
+    <Button
+        android:id="@+id/take_quiz_button"
+        android:layout_width="225dp"
+        android:layout_height="115dp"
+        android:backgroundTint="#c69af4"
+        android:text="TAKE QUIZ"
+        android:textColor="#FF370F61"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/edit_quiz_button"
+        android:layout_width="225dp"
+        android:layout_height="125dp"
+        android:backgroundTint="#c69af4"
+        android:text="EDIT QUIZ"
+        android:textColor="#5D1AA5"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/take_quiz_button" />
+
+    <TextView
+        android:id="@+id/menu_title_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MATH QUIZ"
+        android:textAlignment="center"
+        android:textColor="#FF370F61"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/take_quiz_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
