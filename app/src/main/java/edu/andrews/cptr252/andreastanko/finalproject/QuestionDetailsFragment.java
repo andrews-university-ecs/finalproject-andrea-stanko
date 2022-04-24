@@ -105,6 +105,6 @@ public class QuestionDetailsFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).saveQuestions();
+        edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).updateQuestion(mQuestion_main);
     }
 }

@@ -6,8 +6,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".QuestionDetailsActivity" android:theme="@style/QuizTheme" android:label="@string/app_name"> </activity>
-        <activity android:name=".QuestionListActivity" android:label="@string/app_name"> </activity>
         <activity android:name=".QuizModeActivity" android:label="@string/app_name" android:theme="@style/QuizTheme"> </activity>
     </application>
 </manifest>

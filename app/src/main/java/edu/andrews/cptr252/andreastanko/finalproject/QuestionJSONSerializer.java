@@ -30,8 +30,8 @@ public class QuestionJSONSerializer {
      * @throws IOException
      * @throws JSONException
      */
-    public ArrayList<Question_main> loadQuestions() throws IOException, JSONException{
-        ArrayList<Question_main> Question_mains = new ArrayList<>();
+    public ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> loadQuestions() throws IOException, JSONException{
+        ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> Question_mains = new ArrayList<>();
         BufferedReader reader = null;
         try{
             InputStream in = mContext.openFileInput(mFilename);
@@ -45,7 +45,7 @@ public class QuestionJSONSerializer {
             JSONArray array = (JSONArray) new JSONTokener(jsonString.toString()).nextValue();
 
             for(int i =0; i < array.length(); i++){
-                Question_mains.add(new Question_main(array.getJSONObject(i)));
+                Question_mains.add(new edu.andrews.cptr252.andreastanko.finalproject.Question_main(array.getJSONObject(i)));
             }
         }catch(FileNotFoundException e){
 
@@ -56,9 +56,9 @@ public class QuestionJSONSerializer {
         return Question_mains;
     }
 
-    public void saveQuestions(ArrayList<Question_main> Question_mains) throws JSONException, IOException{
+    public void saveQuestions(ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> Question_mains) throws JSONException, IOException{
         JSONArray array = new JSONArray();
-        for(Question_main q: Question_mains){
+        for(edu.andrews.cptr252.andreastanko.finalproject.Question_main q: Question_mains){
             array.put(q.toJSON());
         }
 

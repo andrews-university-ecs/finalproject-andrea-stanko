@@ -27,14 +27,14 @@ public class QuestionListFragment extends Fragment {
      */
     private static final String TAG = "QuestionListFragment";
 
-    private ArrayList<Question_main> mQuestion_mains;
+    private ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> mQuestion_mains;
 
     /**
      * Recyler view that displays list of quesitons
      */
     private RecyclerView mRecyclerView;
 
-    private QuestionConverter mQuestionConverter;
+    private edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter mQuestionConverter;
 
     public QuestionListFragment() {
         // Required empty public constructor
@@ -47,11 +47,7 @@ public class QuestionListFragment extends Fragment {
         getActivity().setTitle("Question List");
         mQuestion_mains = edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).getQuestions();
 
-        mQuestionConverter = new QuestionConverter(mQuestion_mains, getActivity());
-
-        for(Question_main q: mQuestion_mains){
-            Log.d(TAG, q.getTitle());
-        }
+        mQuestionConverter = new edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter(mQuestion_mains, getActivity());
     }
 
     @Override
@@ -74,15 +70,15 @@ public class QuestionListFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        mQuestionConverter.notifyDataSetChanged();
+        mQuestionConverter.refreshQuestionListDisplay();
     }
 
     private void addQuestion(){
-        Question_main q = new Question_main();
+        edu.andrews.cptr252.andreastanko.finalproject.Question_main q = new edu.andrews.cptr252.andreastanko.finalproject.Question_main();
         edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).addQuestion(q);
 
-        Intent i = new Intent(getActivity(), QuestionDetailsActivity.class);
-        i.putExtra(QuestionConverter.EXTRA_QUESTION_ID, q.getId());
+        Intent i = new Intent(getActivity(), edu.andrews.cptr252.andreastanko.finalproject.QuestionDetailsActivity.class);
+        i.putExtra(edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter.EXTRA_QUESTION_ID, q.getId());
 
         startActivityForResult(i, 0);
     }

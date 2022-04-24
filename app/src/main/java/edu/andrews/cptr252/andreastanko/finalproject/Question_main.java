@@ -42,7 +42,7 @@ public class Question_main {
     public Question_main(JSONObject json) throws JSONException{
         mId = UUID.fromString(json.getString(JSON_ID));
         mTitle = json.optString(JSON_TITLE);
-        mAnswer = json.getBoolean(JSON_ANSWER);
+        mAnswer = json.optBoolean(JSON_ANSWER);
     }
 
     public JSONObject toJSON() throws JSONException{
@@ -61,7 +61,10 @@ public class Question_main {
      * The constructer for the question
      */
     public Question_main(){
-        mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+    public Question_main(UUID id) {
+        mId = id;
     }
 
     /**
@@ -78,6 +81,6 @@ public class Question_main {
      */
     public String getTitle(){return mTitle; }
     public void setTitle(String title){ mTitle = title; }
-    public boolean getAnswer(){return mAnswer;}
+    public boolean getAnswer(){return Boolean.parseBoolean(String.valueOf(mAnswer));}
     public void setAnswer(boolean answer){mAnswer = answer;}
 }
