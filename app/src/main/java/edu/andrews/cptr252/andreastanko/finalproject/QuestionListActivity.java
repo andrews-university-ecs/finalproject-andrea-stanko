@@ -2,10 +2,8 @@ package edu.andrews.cptr252.andreastanko.finalproject;
 
 import androidx.fragment.app.Fragment;
 
-public class QuestionListActivity extends edu.andrews.cptr252.andreastanko.finalproject.SingleFragmentActivity {
+public class QuestionListActivity extends SingleFragmentActivity {
     @Override
-    protected Fragment createFragment() {
-        return new QuestionListFragment();
-    }
+    protected Fragment createFragment() {return new QuestionListFragment();}
 
 }

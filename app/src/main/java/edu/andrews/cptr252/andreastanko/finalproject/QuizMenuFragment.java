@@ -57,7 +57,7 @@ public class QuizMenuFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, edu.andrews.cptr252.andreastanko.finalproject.QuizModeActivity.class);
+                Intent i = new Intent(context, QuizModeActivity.class);
                 context.startActivity(i);
             }
         });

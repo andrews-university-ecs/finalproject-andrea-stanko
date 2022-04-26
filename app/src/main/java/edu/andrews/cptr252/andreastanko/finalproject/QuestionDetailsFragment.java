@@ -1,5 +1,6 @@
 package edu.andrews.cptr252.andreastanko.finalproject;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,16 +21,41 @@ import java.util.UUID;
  */
 public class QuestionDetailsFragment extends Fragment {
     public static final String TAG = "QuestionDetailsFragment";
-    private Question_main mQuestion_main;
+    private Question mQuestion;
     private EditText mTitleField;
     private RadioButton mTrueButton;
     private RadioButton mFalseButton;
+    private RadioButton mButtonGroup;
+
+    public static final String EXTRA_QUESTION_ID
+            = "edu.andrews.cptr252.andreastanko.finalproject.question_id";
+
+
+    /** Required interface to be implemented in hosting activities */
+    public interface Callbacks {
+        void onQuestionUpdated(Question q);
+    }
+    private Callbacks mCallbacks;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks)context;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+    public void updateQuestion() {
+        QuestionList.getInstance(getActivity()).updateQuestion(mQuestion);
+        mCallbacks.onQuestionUpdated(mQuestion);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        UUID questionId = (UUID)getArguments().getSerializable(QuestionConverter.EXTRA_QUESTION_ID);
-        mQuestion_main = edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).getQuestion(questionId);
+        UUID questionId = (UUID)getArguments().getSerializable(edu.andrews.cptr252.andreastanko.finalproject.QuestionAdapter.EXTRA_QUESTION_ID);
+        mQuestion = QuestionList.getInstance(getActivity()).getQuestion(questionId);
     }
 
     public QuestionDetailsFragment() {
@@ -42,36 +68,34 @@ public class QuestionDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_question_details, container, false);
 
-
-
         mTrueButton = v.findViewById(R.id.true_button);
         mFalseButton = v.findViewById(R.id.false_button);
-        if(mQuestion_main.getAnswer() == true){
+        if(mQuestion.getAnswer() == true){
             mTrueButton.setChecked(true);
         }
-        if(mQuestion_main.getAnswer() == false){
+        if(mQuestion.getAnswer() == false){
             mFalseButton.setChecked(true);
         }
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTrueButton.setChecked(true);
-                mQuestion_main.setAnswer(true);
-                Log.d(TAG, "Answer changed to "+ mQuestion_main.getAnswer());
+                mQuestion.setAnswer(true);
+                Log.d(TAG, "Answer changed to "+ mQuestion.getAnswer());
             }
         });
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFalseButton.setChecked(true);
-                mQuestion_main.setAnswer(false);
-                Log.d(TAG, "Answer changed to "+ mQuestion_main.getAnswer());
+                mQuestion.setAnswer(false);
+                Log.d(TAG, "Answer changed to "+ mQuestion.getAnswer());
             }
         });
 
 
         mTitleField = v.findViewById(R.id.question_title);
-        mTitleField.setText(mQuestion_main.getTitle());
+        mTitleField.setText(mQuestion.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,8 +104,8 @@ public class QuestionDetailsFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mQuestion_main.setTitle(s.toString());
-                Log.d(TAG, "Title changed to "+ mQuestion_main.getTitle());
+                mQuestion.setTitle(s.toString());
+                Log.d(TAG, "Title changed to "+ mQuestion.getTitle());
             }
 
             @Override
@@ -94,7 +118,7 @@ public class QuestionDetailsFragment extends Fragment {
 
     public static QuestionDetailsFragment newInstance(UUID questionId){
         Bundle args = new Bundle();
-        args.putSerializable(QuestionConverter.EXTRA_QUESTION_ID, questionId);
+        args.putSerializable(edu.andrews.cptr252.andreastanko.finalproject.QuestionAdapter.EXTRA_QUESTION_ID, questionId);
 
         QuestionDetailsFragment fragment = new QuestionDetailsFragment();
 
@@ -105,6 +129,6 @@ public class QuestionDetailsFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).updateQuestion(mQuestion_main);
+        QuestionList.getInstance(getActivity()).updateQuestion(mQuestion);
     }
 }

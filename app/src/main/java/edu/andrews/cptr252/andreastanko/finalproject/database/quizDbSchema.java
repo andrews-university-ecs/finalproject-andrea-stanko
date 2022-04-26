@@ -1,15 +1,15 @@
 package edu.andrews.cptr252.andreastanko.finalproject.database;
 
 public class quizDbSchema {
-    public static final class QuizTable {
-        public static final String NAME = "questions";
+    public static final class quizTable {
+        public static final String NAME = "quiz";
         /**
          * DB column names.
          */
         public static final class Cols {
             public static final String UUID = "uuid";
             public static final String QUESTION = "question";
-            public static final boolean ANSWER = true;
+            public static final String ANSWER = "answer";
         }
     }
 

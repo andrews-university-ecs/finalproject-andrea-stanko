@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 import java.util.UUID;
 
-public class Question_main {
+public class Question {
     /**
-     * UUID of the question, a beautiful unique identifier that may or may not be needed
+     * UUID of the question, a beautiful unique identifier that may not be needed
      */
     private UUID mId;
 
@@ -39,10 +39,10 @@ public class Question_main {
      * @param json json question object
      * @throws JSONException
      */
-    public Question_main(JSONObject json) throws JSONException{
+    public Question(JSONObject json) throws JSONException{
         mId = UUID.fromString(json.getString(JSON_ID));
         mTitle = json.optString(JSON_TITLE);
-        mAnswer = json.optBoolean(JSON_ANSWER);
+        mAnswer = json.getBoolean(JSON_ANSWER);
     }
 
     public JSONObject toJSON() throws JSONException{
@@ -60,12 +60,14 @@ public class Question_main {
     /**
      * The constructer for the question
      */
-    public Question_main(){
+    public Question(){
         this(UUID.randomUUID());
     }
-    public Question_main(UUID id) {
+
+    public Question(UUID id) {
         mId = id;
     }
+
 
     /**
      * Returns the ID of the question
@@ -81,6 +83,6 @@ public class Question_main {
      */
     public String getTitle(){return mTitle; }
     public void setTitle(String title){ mTitle = title; }
-    public boolean getAnswer(){return Boolean.parseBoolean(String.valueOf(mAnswer));}
+    public boolean getAnswer(){return mAnswer;}
     public void setAnswer(boolean answer){mAnswer = answer;}
 }

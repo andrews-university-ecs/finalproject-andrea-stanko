@@ -16,34 +16,42 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-public class QuestionConverter extends RecyclerView.Adapter<QuestionConverter.ViewHolder> {
+public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
     public static final String TAG ="QuestionAdapter";
-    public static final String EXTRA_QUESTION_ID = "edu.andrews.cptr252.andreastanko.finalproject.question_id";
+    public static final String EXTRA_QUESTION_ID = "edu.andrews.cptr252.brodis.quizApp.question_id";
 
     /**
      * Array list of questions, our quiz if you will
      */
-    private ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> mQuestion_mains;
+    private ArrayList<Question> mQuestion_s;
 
     private Activity mActivity;
 
+    private QuestionListFragment.Callbacks mCallbacks;
+    public void setCallbacks(QuestionListFragment.Callbacks callbacks) {
+        mCallbacks = callbacks;
+    }
+
+
     /**
      * Nice constructer of the questionAdapter
-     * @param Question_mains Arraylist of questions, singleton class
+     * @param question_s Arraylist of questions, singleton class
      */
-    public QuestionConverter(ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> Question_mains, Activity activity){
+    public QuestionAdapter(ArrayList<Question> question_s, Activity activity){
         mActivity = activity;
-        mQuestion_mains = Question_mains;
+        mQuestion_s = question_s;
+        setCallbacks((QuestionListFragment.Callbacks) mActivity);
+
     }
 
     public Context getActivty(){
         return mActivity;
     }
 
-    private void showUndoSnachbar(final edu.andrews.cptr252.andreastanko.finalproject.Question_main q, final int position){
+    private void showUndoSnachbar(final Question q, final int position){
         View view = mActivity.findViewById(android.R.id.content);
-        String questionDeletedText = mActivity.getString(R.string.question_deleted_msg, q.getTitle());
-        Snackbar snackbar = Snackbar.make(view, questionDeletedText, Snackbar.LENGTH_LONG);
+        String bugDeletedText = mActivity.getString(R.string.question_deleted_msg, q.getTitle());
+        Snackbar snackbar = Snackbar.make(view, bugDeletedText, Snackbar.LENGTH_LONG);
 
         snackbar.setAction(R.string.undo_option, new View.OnClickListener() {
             @Override
@@ -52,13 +60,14 @@ public class QuestionConverter extends RecyclerView.Adapter<QuestionConverter.Vi
                 restoreQuestion(q, position);
             }
         });
+
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
                 super.onDismissed(transientBottomBar, event);
                 if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                     // Officially delete bug from bug list
-                    edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(mActivity).deleteQuestion(q);
+                    QuestionList.getInstance(mActivity).deleteQuestion(q);
                 }
             }
         });
@@ -70,23 +79,22 @@ public class QuestionConverter extends RecyclerView.Adapter<QuestionConverter.Vi
     }
 
     public void deleteQuestion(int position){
-        final edu.andrews.cptr252.andreastanko.finalproject.Question_main q = mQuestion_mains.get(position);
+        final Question q = mQuestion_s.get(position);
 
-        // delete bug from bug array used by adapter (not official list)
-        mQuestion_mains.remove(position);
-
+        mQuestion_s.remove(position);
 
         notifyItemRemoved(position);
         showUndoSnachbar(q,position);
     }
-
-    public void restoreQuestion(edu.andrews.cptr252.andreastanko.finalproject.Question_main q, int position){
-        refreshQuestionListDisplay();
-    }
     /** Force adapter to load new bug list and regenerate views. */
     public void refreshQuestionListDisplay() {
-        mQuestion_mains = edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(mActivity).getQuestions();
+        mQuestion_s = QuestionList.getInstance(mActivity).getQuestions();
         notifyDataSetChanged();
+    }
+
+    public void restoreQuestion(Question q, int position){
+        refreshQuestionListDisplay();
+
     }
 
 
@@ -139,12 +147,12 @@ public class QuestionConverter extends RecyclerView.Adapter<QuestionConverter.Vi
 
 
             if(position != RecyclerView.NO_POSITION){
-                edu.andrews.cptr252.andreastanko.finalproject.Question_main q = mQuestion_mains.get(position);
+                Question q = mQuestion_s.get(position);
                 /**
                  * Creating an intent to launch the question details when a question is clicked
                  */
                 Intent i = new Intent(context, edu.andrews.cptr252.andreastanko.finalproject.QuestionDetailsActivity.class);
-                i.putExtra(QuestionConverter.EXTRA_QUESTION_ID, q.getId());
+                i.putExtra(QuestionAdapter.EXTRA_QUESTION_ID, q.getId());
                 context.startActivity(i);
             }
         }
@@ -165,20 +173,21 @@ public class QuestionConverter extends RecyclerView.Adapter<QuestionConverter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position){
-        edu.andrews.cptr252.andreastanko.finalproject.Question_main q = mQuestion_mains.get(position);
+        Question q = mQuestion_s.get(position);
 
         TextView questionTextView = viewHolder.questionTextView;
         RadioButton trueButton = viewHolder.trueButton;
         RadioButton falseButton = viewHolder.falseButton;
 
         questionTextView.setText(q.getTitle());
+
         trueButton.setChecked(q.getAnswer());
         falseButton.setChecked(!q.getAnswer());
     }
 
     @Override
     public int getItemCount() {
-        return mQuestion_mains.size();
+        return mQuestion_s.size();
     }
 
 }

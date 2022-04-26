@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class QuestionSwiper extends ItemTouchHelper.SimpleCallback {
 
-    private QuestionConverter mAdapter;
+    private edu.andrews.cptr252.andreastanko.finalproject.QuestionAdapter mAdapter;
     private Drawable mIcon;
     private final ColorDrawable mBackground;
 
-    public QuestionSwiper(QuestionConverter adapter){
+    public QuestionSwiper(edu.andrews.cptr252.andreastanko.finalproject.QuestionAdapter adapter){
         super(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
         mIcon = ContextCompat.getDrawable(mAdapter.getActivty(),android.R.drawable.ic_menu_delete);

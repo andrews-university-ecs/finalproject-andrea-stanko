@@ -24,14 +24,14 @@ import java.util.ArrayList;
  */
 public class QuizModeFragment extends Fragment {
 
-    private static final String TAG= "QuizModeFragment";
+    private static final String TAG= "TAKEQUIZFRAGMENT";
 
 
     private TextView question_title;
     private Button true_button;
     private Button false_button;
     private Context context;
-    private ArrayList<Question_main> mQuestion_mains;
+    private ArrayList<Question> mQuestion_s;
 
 
 
@@ -45,7 +45,7 @@ public class QuizModeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mQuestion_mains = edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).getQuestions();
+        mQuestion_s = QuestionList.getInstance(getActivity()).getQuestions();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class QuizModeFragment extends Fragment {
         question_title = v.findViewById(R.id.take_quiz_question_textView);
 
 
-        if(mQuestion_mains.size() == 0){
+        if(mQuestion_s.size() == 0){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("No quiz has been created! Please go add some questions!");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -76,7 +76,7 @@ public class QuizModeFragment extends Fragment {
             Log.d(TAG, "No quiz found, redirecting...");
             return v;
         }
-        question_title.setText(mQuestion_mains.get(mCurrentIndex).getTitle());
+        question_title.setText(mQuestion_s.get(mCurrentIndex).getTitle());
 
         true_button = v.findViewById(R.id.take_quiz_true_button);
         false_button = v.findViewById(R.id.take_quiz_false_button);
@@ -86,27 +86,27 @@ public class QuizModeFragment extends Fragment {
         true_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mQuestion_mains.get(mCurrentIndex).getAnswer() == true){
+                if(mQuestion_s.get(mCurrentIndex).getAnswer() == true){
                     score++;
-                    if(mCurrentIndex+1 <  mQuestion_mains.size()){
+                    if(mCurrentIndex+1 <  mQuestion_s.size()){
                         mCurrentIndex++;
                     } else {
                         endQuiz();
                         return;
                     }
-                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_mains.size());
+                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_s.size());
                     correct_toast.show();
-                    question_title.setText(mQuestion_mains.get(mCurrentIndex).getTitle());
+                    question_title.setText(mQuestion_s.get(mCurrentIndex).getTitle());
                 } else {
-                    if(mCurrentIndex+1 <  mQuestion_mains.size()){
+                    if(mCurrentIndex+1 <  mQuestion_s.size()){
                         mCurrentIndex++;
                     } else {
                         endQuiz();
                         return;
                     }
-                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_mains.size());
+                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_s.size());
                     incorrect_toast.show();
-                    question_title.setText(mQuestion_mains.get(mCurrentIndex).getTitle());
+                    question_title.setText(mQuestion_s.get(mCurrentIndex).getTitle());
                 }
             }
         });
@@ -114,27 +114,27 @@ public class QuizModeFragment extends Fragment {
         false_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mQuestion_mains.get(mCurrentIndex).getAnswer() == false){
+                if(mQuestion_s.get(mCurrentIndex).getAnswer() == false){
                     score++;
-                    if(mCurrentIndex+1 <  mQuestion_mains.size()){
+                    if(mCurrentIndex+1 <  mQuestion_s.size()){
                         mCurrentIndex++;
                     } else {
                         endQuiz();
                         return;
                     }
-                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_mains.size());
+                    Log.d("TAKEQUIZFRAGMENT", "current index: " + mCurrentIndex + "Quuestions size: " + mQuestion_s.size());
                     correct_toast.show();
-                    question_title.setText(mQuestion_mains.get(mCurrentIndex).getTitle());
+                    question_title.setText(mQuestion_s.get(mCurrentIndex).getTitle());
 
                 } else {
-                    if(mCurrentIndex+1 <  mQuestion_mains.size()){
+                    if(mCurrentIndex+1 <  mQuestion_s.size()){
                         mCurrentIndex++;
                     } else {
                         endQuiz();
                         return;
                     }
                     incorrect_toast.show();
-                    question_title.setText(mQuestion_mains.get(mCurrentIndex).getTitle());
+                    question_title.setText(mQuestion_s.get(mCurrentIndex).getTitle());
                 }
             }
         });
@@ -144,7 +144,7 @@ public class QuizModeFragment extends Fragment {
 
     public void endQuiz(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("You got a score of " + score + " out of " + mQuestion_mains.size());
+        builder.setMessage("You got a score of " + score + " out of " + mQuestion_s.size());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

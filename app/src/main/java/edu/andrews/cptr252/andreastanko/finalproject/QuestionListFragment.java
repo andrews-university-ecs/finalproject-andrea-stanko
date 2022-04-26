@@ -1,5 +1,6 @@
 package edu.andrews.cptr252.andreastanko.finalproject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,14 +28,15 @@ public class QuestionListFragment extends Fragment {
      */
     private static final String TAG = "QuestionListFragment";
 
-    private ArrayList<edu.andrews.cptr252.andreastanko.finalproject.Question_main> mQuestion_mains;
+
+    private ArrayList<Question> mQuestion_s;
 
     /**
      * Recyler view that displays list of quesitons
      */
     private RecyclerView mRecyclerView;
 
-    private edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter mQuestionConverter;
+    private  QuestionAdapter mQuestionAdapter;
 
     public QuestionListFragment() {
         // Required empty public constructor
@@ -45,9 +47,9 @@ public class QuestionListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         getActivity().setTitle("Question List");
-        mQuestion_mains = edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).getQuestions();
+        mQuestion_s = QuestionList.getInstance(getActivity()).getQuestions();
 
-        mQuestionConverter = new edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter(mQuestion_mains, getActivity());
+        mQuestionAdapter = new QuestionAdapter(mQuestion_s, getActivity());
     }
 
     @Override
@@ -57,10 +59,10 @@ public class QuestionListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_question_list, container, false);
 
         mRecyclerView = v.findViewById(R.id.question_list_recyclerView);
-        mRecyclerView.setAdapter(mQuestionConverter);
+        mRecyclerView.setAdapter(mQuestionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        QuestionSwiper bugSwiper = new QuestionSwiper(mQuestionConverter);
+        edu.andrews.cptr252.andreastanko.finalproject.QuestionSwiper bugSwiper = new edu.andrews.cptr252.andreastanko.finalproject.QuestionSwiper(mQuestionAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(bugSwiper);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -70,17 +72,38 @@ public class QuestionListFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        mQuestionConverter.refreshQuestionListDisplay();
+        mQuestionAdapter.refreshQuestionListDisplay();
+
+    }
+
+    /** Required interface to be implemented in hosting activities */
+    public interface Callbacks {
+        void onQuestionSelected(Question q);
+    }
+    private Callbacks mCallbacks;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks)context;
+        if (mQuestionAdapter != null) {
+            mQuestionAdapter.setCallbacks(mCallbacks);
+        }
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mQuestionAdapter.setCallbacks(mCallbacks);
+    }
+    /** Update bug list display */
+    public void updateUI() {
+        mQuestionAdapter.refreshQuestionListDisplay();
     }
 
     private void addQuestion(){
-        edu.andrews.cptr252.andreastanko.finalproject.Question_main q = new edu.andrews.cptr252.andreastanko.finalproject.Question_main();
-        edu.andrews.cptr252.andreastanko.finalproject.QuestionList.getInstance(getActivity()).addQuestion(q);
+        Question q = new Question();
+        QuestionList.getInstance(getActivity()).addQuestion(q);
 
-        Intent i = new Intent(getActivity(), edu.andrews.cptr252.andreastanko.finalproject.QuestionDetailsActivity.class);
-        i.putExtra(edu.andrews.cptr252.andreastanko.finalproject.QuestionConverter.EXTRA_QUESTION_ID, q.getId());
-
-        startActivityForResult(i, 0);
+        mCallbacks.onQuestionSelected(q);
     }
 
     @Override
